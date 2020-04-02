@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from mailjet_rest import Client
+# from mailjet_rest import Client
 import os
+import requests
 
 from .models import Flight
 
@@ -20,45 +21,32 @@ def tracking_view(request):
         try:
             flight = Flight.objects.get(number=int(request.POST.get("tracking")))
             return render(request, 'tracking.html', {"flight": flight})
-        
+
         except Flight.DoesNotExist:
             return render(request, 'tracking.html', {"error_message": "Flight does not exist."})
-    
+
     return render(request, 'tracking.html')
-    
+
 def about_view(request):
     return render(request, 'about.html')
 
+def send_simple_message(name, email, subject, message):
+	return requests.post(
+		"https://api.mailgun.net/v3/sandboxcc255dee358f491d9965eeeeff0d07b3.mailgun.org/messages",
+		auth=("api", "8b3067f3767ffdb9c02afda45dc02b7d-ed4dc7c4-56618e3c"),
+		data={"from": "support@sandboxcc255dee358f491d9965eeeeff0d07b3.mailgun.org",
+			"to": [email],
+			"subject": subject,
+			"text": f"Name: { name }\nMessage: { message }"})
 
 def contact_view(request):
     if request.method == 'POST':
-        api_key = 'b19c65277284563a4f0aa934cc7d7814'
-        api_secret = '4974dd6642ad5fbddd4073325ede6621'
-        mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-        data = {
-            'Messages': [
-                {
-                    "From": {
-                        "Email": "travelexpress@support.com",
-                        "Name": "harrison"
-                    },
-                    "To": [
-                        {
-                            "Email": "frankharrisonmd250@gmail.com",
-                            "Name": "harrison"
-                        }
-                    ],
-                    "Subject": "Greetings from Mailjet.",
-                    "TextPart": "My first Mailjet email",
-                    "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
-                    "CustomID": "AppGettingStartedTest"
-                }
-            ]
-        }
-        result = mailjet.send.create(data=data)
-        print (result.status_code)
-        print (result.json())
-
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        req = send_simple_message(name, email, subject, message)
+        return render(request, 'contact.html', {"req": req})
     return render(request, 'contact.html')
 
 

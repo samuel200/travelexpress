@@ -1,0 +1,58 @@
+#tracking-holder input,
+#tracking-holder input::placeholder{
+    font-size: 1em;
+    padding: 10px;
+}
+
+#tracking-holder input{
+    width: 350px;
+    border: 1px solid #040E27;
+    border-radius: 10px;
+    color: #040E27;
+    outline: none;
+}
+
+#tracking-holder button{
+    padding: 10px;
+    background: #040E27;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+#tracking-holder button:hover{
+    cursor: pointer;
+    background: rgb(7, 24, 68);
+}
+
+label[for="tracking"]{
+    color: #040E27;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+
+#tracking-details{
+    margin: 50px auto;
+}
+
+.tracking-heading{
+    background-color: #040E27;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 10px;
+}
+
+.detail-item{
+    border-bottom: 1px solid #040E27;
+    padding: 10px 15px;
+    margin: 15px auto;
+}
+
+#tracking-details h1{
+    margin: 25px auto;
+}
+
+.detail-item b{
+    padding-right:40px;
+}
